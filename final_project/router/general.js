@@ -82,10 +82,16 @@ public_users.get('/title/:title', async function (req, res) {
 
 public_users.get('/review/:isbn', function (req, res) {
   const isbn = req.params.isbn;
-  if (books[isbn]) {
-    return res.status(200).json(books[isbn].reviews);
+  const book = books[isbn];
+
+  if (book) {
+    if (Object.keys(book.reviews).length > 0) {
+      return res.status(200).json(book.reviews);
+    } else {
+      return res.status(200).json({ message: "No reviews found for this book." });
+    }
   }
-  return res.status(404).json({ message: "Review not found" });
+  return res.status(404).json({ message: "Book not found" });
 });
 
 module.exports.general = public_users;
